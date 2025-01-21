@@ -1,5 +1,5 @@
-@use 'sass:list';
-@use 'variables/font-sizes.scss' as variables;
+@use './mixins/responsive.scss' as responsive;
+@use './utils.scss';
 
 :root {
     --black: #263238;
@@ -37,41 +37,6 @@
     box-sizing: border-box;
 }
 
-@each $key, $value in variables.$heading-types {
-    #{$key} {
-        font-size: #{list.nth($value, 1)}px;
-        line-height: #{list.nth($value, 2)}px;
-        font-weight: 700;
-    }
-}
-
-@each $key, $value in variables.$font-sizes-regular {
-    #{$key} {
-        font-size: #{list.nth($value, 1)}px;
-        line-height: #{list.nth($value, 2)}px;
-        font-weight: 400;
-    }
-}
-
-@each $key, $value in variables.$font-sizes-medium {
-    #{$key} {
-        font-size: #{list.nth($value, 1)}px;
-        line-height: #{list.nth($value, 2)}px;
-        font-weight: 300;
-    }
-}
-
-@for $i from 1 through 8 {
-    $shadow-opacity: if($i == 1, 0.6, if($i == 2 or $i == 4, 0.4, 0.3));
-    $shadow-color: rgba(171, 190, 209, $shadow-opacity);
-
-    @if $i != 5 and $i != 6 and $i != 7 {
-        .shadow-#{$i} {
-            box-shadow: 0px calc(#{$i} * 2px) calc(#{$i} * 4px) $shadow-color;
-        }
-    }
-}
-
 #app {
     width: 100%;
     max-width: 1440px;
@@ -91,14 +56,32 @@
     justify-content: space-around;
     align-items: center;
     background-color: var(--silver);
+    position: relative;
+
+    @include responsive.sm {
+        justify-content: space-between;
+        padding: 0 20px;
+    }
 
     &__navigation {
+        @include responsive.sm {
+            display: none;
+        }
+
         ul {
             list-style-type: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 50px;
+
+            @include responsive.lg {
+                gap: 30px;
+            }
+
+            @include responsive.md {
+                gap: 10px;
+            }
 
             li {
                 a {
@@ -130,6 +113,58 @@
         display: flex;
         align-items: center;
         gap: 14px;
+
+        @include responsive.sm {
+            display: none;
+        }
+    }
+
+    &__menu {
+        display: none;
+        cursor: pointer;
+
+        @include responsive.sm {
+            display: block;
+        }
+    }
+
+    &__mobile {
+        position: absolute;
+        z-index: 2;
+        top: 80px;
+        left: 0;
+        right: 0;
+        height: auto;
+        background-color: var(--white);
+        padding: 20px;
+        display: none;
+
+        &.active {
+            display: block;
+        }
+
+        ul {
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            li {
+                padding: 10px;
+
+                a {
+                    text-decoration: none;
+                    color: var(--black);
+                    transition: color 0.2s ease-in-out;
+                    display: inline-block;
+                    text-align: center;
+                }
+
+                &:hover {
+                    background-color: var(--tint-5);
+                }
+            }
+        }
     }
 }
 
@@ -138,6 +173,7 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
+    margin-bottom: 40px;
 
     .hero {
         background-color: var(--silver);
@@ -149,11 +185,25 @@
             position: relative;
             padding: 96px 0;
 
+            @include responsive.lg {
+                gap: auto;
+                justify-content: space-between;
+                padding: 96px 20px;
+            }
+
+            @include responsive.sm {
+                flex-direction: column;
+            }
+
             &--left {
                 width: 657px;
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
+
+                @include responsive.sm {
+                    width: auto;
+                }
 
                 h1 {
                     margin: 0;
@@ -170,6 +220,10 @@
                     width: 391px;
                     height: 407px;
                     object-fit: cover;
+
+                    @include responsive.sm {
+                        width: 100%;
+                    }
                 }
             }
 
@@ -207,6 +261,10 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+
+            @include responsive.lg {
+                padding: 0 20px;
+            }
 
             &--heading {
                 display: flex;
@@ -246,6 +304,10 @@
                 h2 {
                     width: 502px;
                     text-align: center;
+
+                    @include responsive.md {
+                        width: auto;
+                    }
                 }
 
                 p {
@@ -258,6 +320,14 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 127.5px;
+
+            @include responsive.md {
+                gap: 40px;
+            }
+
+            @include responsive.sm {
+                grid-template-columns: repeat(1, 1fr);
+            }
         }
     }
 
@@ -268,11 +338,19 @@
             align-items: center;
             gap: 49px;
 
+            @include responsive.sm {
+                flex-direction: column;
+            }
+
             &--left {
                 img {
                     width: 422px;
                     height: 433px;
                     object-fit: cover;
+
+                    @include responsive.sm {
+                        width: 100%;
+                    }
                 }
             }
 
@@ -281,11 +359,25 @@
                 flex-direction: column;
                 gap: 32px;
 
+                @include responsive.sm {
+                    button {
+                        margin: 0 auto;
+                    }
+                }
+
                 .unlock-heading {
                     width: 601px;
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
+
+                    @include responsive.md {
+                        width: auto;
+                    }
+
+                    @include responsive.sm {
+                        text-align: center;
+                    }
 
                     p {
                         color: var(--grey);
@@ -303,13 +395,36 @@
         background-color: var(--silver);
         padding: 64px 144px;
 
+        @include responsive.lg {
+            padding: 64px 84px;
+        }
+
+        @include responsive.md {
+            padding: 64px 44px;
+        }
+
+        @include responsive.sm {
+            padding: 64px 20px;
+        }
+
         &__content {
             display: flex;
             align-items: center;
             gap: 72px;
 
+            @include responsive.md {
+                flex-direction: column;
+            }
+
             &--left {
                 width: 540px;
+                @include responsive.md {
+                    text-align: center;
+                }
+
+                @include responsive.sm {
+                    width: auto;
+                }
             }
 
             &--right {
@@ -317,11 +432,20 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 30px;
 
+                @include responsive.sm {
+                    grid-template-columns: repeat(1, 1fr);
+                    row-gap: 40px;
+                }
+
                 .count {
                     width: 255px;
                     display: flex;
                     align-items: center;
                     gap: 16px;
+
+                    @include responsive.sm {
+                        width: auto;
+                    }
 
                     .count__icon {
                         size: 48px;
@@ -345,11 +469,23 @@
             align-items: center;
             gap: 49.47px;
 
+            @include responsive.lg {
+                padding: 0 20px;
+            }
+
+            @include responsive.md {
+                flex-direction: column;
+            }
+
             &--left {
                 .calender__img {
                     width: 441.53px;
                     height: 433.4px;
                     object-fit: cover;
+
+                    @include responsive.sm {
+                        width: 100%;
+                    }
                 }
             }
 
@@ -375,10 +511,30 @@
         padding: 32px 144px;
         background-color: var(--silver);
 
+        @include responsive.lg {
+            padding: 32px 84px;
+        }
+
+        @include responsive.md {
+            padding: 32px 44px;
+        }
+
+        @include responsive.sm {
+            padding: 32px 20px;
+        }
+
         &__content {
             display: flex;
             align-items: center;
             gap: 78px;
+
+            @include responsive.md {
+                flex-direction: column;
+            }
+
+            @include responsive.sm {
+                gap: 32px;
+            }
 
             &--left {
                 .customer-img {
@@ -396,6 +552,7 @@
                 .customer--logos {
                     display: flex;
                     align-items: center;
+                    flex-wrap: wrap;
                     gap: 41px;
                 }
             }
@@ -407,14 +564,26 @@
         flex-direction: column;
         gap: 16px;
 
+        @include responsive.lg {
+            padding: 0 20px;
+        }
+
         &__heading {
             display: flex;
             flex-direction: column;
             align-items: center;
 
+            @include responsive.sm {
+                text-align: center;
+            }
+
             p {
                 width: 628px;
                 text-align: center;
+
+                @include responsive.sm {
+                    width: auto;
+                }
             }
         }
 
@@ -422,6 +591,15 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
+
+            @include responsive.sm {
+                grid-template-columns: repeat(1, 1fr);
+                gap: 16px;
+
+                .customer-card {
+                    max-width: 100%;
+                }
+            }
         }
     }
 }
@@ -439,6 +617,10 @@
         h1 {
             text-align: center;
             margin: 0;
+
+            @include responsive.md {
+                font-size: 40px;
+            }
         }
 
         button {
@@ -454,10 +636,27 @@
         display: flex;
         justify-content: space-between;
 
+        @include responsive.lg {
+            gap: 48px;
+            padding: 64px 84px;
+        }
+
+        @include responsive.md {
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 64px 20px;
+        }
+
         &--left {
             display: flex;
             flex-direction: column;
             gap: 40px;
+
+            @include responsive.md {
+                flex: 1;
+                text-align: center;
+                margin-bottom: 40px;
+            }
 
             .copyright {
                 display: flex;
@@ -469,6 +668,10 @@
             .socials {
                 display: flex;
                 gap: 16px;
+
+                @include responsive.md {
+                    justify-content: center;
+                }
 
                 & > img {
                     cursor: pointer;
@@ -484,9 +687,21 @@
             gap: 30px;
             align-items: flex-start;
 
+            @include responsive.md {
+                flex: 1;
+
+                .navigation:nth-child(3) {
+                    display: none;
+                }
+            }
+
             .navigation {
                 color: white;
                 min-width: 160px;
+
+                @include responsive.md {
+                    flex: 1;
+                }
 
                 ul {
                     list-style-type: none;

@@ -1,0 +1,37 @@
+@use 'variables/font-sizes.scss' as variables;
+@use 'sass:list';
+
+@each $key, $value in variables.$heading-types {
+    #{$key} {
+        font-size: #{list.nth($value, 1)}px;
+        line-height: #{list.nth($value, 2)}px;
+        font-weight: 700;
+    }
+}
+
+@each $key, $value in variables.$font-sizes-regular {
+    #{$key} {
+        font-size: #{list.nth($value, 1)}px;
+        line-height: #{list.nth($value, 2)}px;
+        font-weight: 400;
+    }
+}
+
+@each $key, $value in variables.$font-sizes-medium {
+    #{$key} {
+        font-size: #{list.nth($value, 1)}px;
+        line-height: #{list.nth($value, 2)}px;
+        font-weight: 300;
+    }
+}
+
+@for $i from 1 through 8 {
+    $shadow-opacity: if($i == 1, 0.6, if($i == 2 or $i == 4, 0.4, 0.3));
+    $shadow-color: rgba(171, 190, 209, $shadow-opacity);
+
+    @if $i != 5 and $i != 6 and $i != 7 {
+        .shadow-#{$i} {
+            box-shadow: 0px calc(#{$i} * 2px) calc(#{$i} * 4px) $shadow-color;
+        }
+    }
+}

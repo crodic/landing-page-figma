@@ -1,3 +1,5 @@
+@use '../../mixins/responsive.scss' as responsive;
+
 .card {
     width: 100%;
     max-width: 299px;
@@ -5,6 +7,10 @@
     flex-direction: column;
     gap: 8px;
     padding: 24px 16px;
+
+    @include responsive.sm {
+        max-width: 100%;
+    }
 
     &__header {
         display: flex;
@@ -39,6 +45,10 @@
         height: 286px;
         object-fit: cover;
         border-radius: 8px;
+
+        @include responsive.md {
+            width: 100%;
+        }
     }
 
     .customer-card__info {
@@ -52,6 +62,11 @@
         flex-direction: column;
         justify-content: center;
         gap: 16px;
+
+        @include responsive.md {
+            width: 90%;
+            margin: 0 auto;
+        }
 
         h4 {
             text-align: center;
